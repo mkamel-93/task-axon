@@ -1,0 +1,109 @@
+# ============================================================
+# 🧠 Environment and Configuration
+# ============================================================
+.env
+.env.*
+!.env.example
+!.env.docker
+!.env.deploy
+!.env.dusk
+auth.json
+phpunit.xml.bak
+phpunit.xml.local
+/.htaccess
+**/*.bkp
+/*.dtmp
+
+# ============================================================
+# 🧩 Vendor & Node Dependencies
+# ============================================================
+/vendor/
+/node_modules/
+/bun.lockb
+/storage/pail
+
+# ============================================================
+# 🏗️ Build and Compiled Assets (Vite / Mix)
+# ============================================================
+/public/build
+/public/storage
+/public/hot
+/public/mix-manifest.json
+/public/fonts-manifest.dev.json
+/public/sitemap.xml
+/public/robots.txt
+/.vite
+/bootstrap/ssr
+
+# ============================================================
+# 🗄️ Storage and Cache (Laravel Runtime)
+# ============================================================
+/storage/app/public
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/framework/testing
+/storage/framework/cache/data
+/storage/logs
+/storage/*.key
+/storage/.*
+
+# Keep directory structure but ignore contents
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+
+# ============================================================
+# 🧪 Testing, CI/CD, and Quality Tools
+# ============================================================
+.phpunit.cache/
+.phpunit.result.cache
+.php-cs-fixer.cache
+.eslintcache
+/tests/Browser/screenshots/*
+/tests/Browser/console/*
+
+# ============================================================
+# 🗄️ Database & Local Data (Redis/MySQL dumps)
+# ============================================================
+*.sqlite
+*.sqlite-journal
+dump.rdb
+
+# ============================================================
+# 🧰 IDEs, Editors, and Tools
+# ============================================================
+/.idea/
+/.vscode/
+/.fleet/
+/.nova/
+/.zed/
+/.cursor/
+/.codex/
+.phpactor.json
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+_ide_helper_models.json
+sftp-config.json
+*.swp
+Homestead.json
+Homestead.yaml
+
+# ============================================================
+# ⚙️ Docker and System Logs
+# ============================================================
+.docker/logs/*
+error_log
+public/error_log
+npm-debug.log*
+yarn-debug.log*
+*.log
+
+# ============================================================
+# 🪟 OS Files
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
