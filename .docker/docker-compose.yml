@@ -1,0 +1,120 @@
+# ----------------------------------------------------------------------------------
+# YAML Anchors to remove duplication
+# ----------------------------------------------------------------------------------
+x-common-build: &common-build
+  context: .
+  args:
+    DOCKER_SERVICES_PATH: ${DOCKER_SERVICES_PATH}
+    USER_ID: ${LOCAL_UID:-1000}
+    GROUP_ID: ${LOCAL_GID:-1000}
+
+x-common-dir-work: &common-dir-work
+  - type: bind
+    source: .
+    target: /var/www/
+
+# ----------------------------------------------------------------------------------
+# Volumes for persistence and communication
+# ----------------------------------------------------------------------------------
+volumes:
+  php-fpm-socket:
+  psysh-store:
+  db_volume:
+  redis_volume:
+
+# ----------------------------------------------------------------------------------
+# Network Configuration
+# ----------------------------------------------------------------------------------
+networks:
+  app_subnet:
+    name: ${DOCKER_APP_NAME}
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${DOCKER_NETWORK_SUBNET}
+
+# ----------------------------------------------------------------------------------
+# Services
+# ----------------------------------------------------------------------------------
+services:
+  php:
+    image: ${DOCKER_APP_NAME}_php:latest
+    container_name: ${DOCKER_APP_NAME}_php
+    build:
+      <<: *common-build
+      dockerfile: ${DOCKER_SERVICES_PATH}/php/Dockerfile
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - type: volume
+        source: psysh-store
+        target: /root/.config/psysh
+        volume:
+          nocopy: true
+      - <<: *common-dir-work
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      DEBUG: 1
+      PHP_IDE_CONFIG: serverName=${DOCKER_APP_NAME}_XdebugServer
+      APP_URL: "http://${DOCKER_WEB_IP}"
+    depends_on:
+      - redis
+    networks:
+      app_subnet:
+        ipv4_address: ${DOCKER_PHP_IP}
+
+  web:
+    image: ${DOCKER_APP_NAME}_web:latest
+    container_name: ${DOCKER_APP_NAME}_web
+    build:
+      <<: *common-build
+      dockerfile: ${DOCKER_SERVICES_PATH}/web/Dockerfile
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - <<: *common-dir-work
+    ports:
+      - "80:80"
+      - "5173:5173"
+    depends_on:
+      - php
+    networks:
+      app_subnet:
+        ipv4_address: ${DOCKER_WEB_IP}
+
+  redis:
+    image: ${DOCKER_APP_NAME}_redis:latest
+    container_name: ${DOCKER_APP_NAME}_redis
+    build:
+      <<: *common-build
+      dockerfile: ${DOCKER_SERVICES_PATH}/redis/Dockerfile
+    restart: unless-stopped
+    tty: true
+    command: >
+      redis-server
+      --port ${REDIS_PORT:-6379}
+      --requirepass ${REDIS_PASSWORD:-P@ssw0rd}
+    volumes:
+      - type: volume
+        source: redis_volume
+        target: /data
+        volume:
+          nocopy: true
+    ports:
+      - "6379"
+    networks:
+      app_subnet:
+        ipv4_address: ${DOCKER_REDIS_IP}
+
