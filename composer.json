@@ -14,14 +14,21 @@
         "laravel/tinker": "^3.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.2",
+        "barryvdh/laravel-ide-helper": "^3.7",
+        "brianium/paratest": "^7.19",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.9",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.7",
-        "pestphp/pest-plugin-laravel": "^4.1"
+        "pestphp/pest-plugin-laravel": "^4.1",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-mockery": "^2.0",
+        "wikimedia/composer-merge-plugin": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -40,9 +47,7 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
-            "npm install --ignore-scripts",
-            "npm run build"
+            "@php artisan migrate --force"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -82,7 +87,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "minimum-stability": "stable",
