@@ -88,9 +88,6 @@ export default defineConfig(({ mode }) => {
             // Optional: Optimize build
             chunkSizeWarningLimit: 1000, // Adjust based on your needs
 
-            // Optional: Enable/disable minification
-            minify: 'esbuild',
-
             // Optional: Source maps for production debugging
             sourcemap: false, // Set to true if you need source maps in production
         },
