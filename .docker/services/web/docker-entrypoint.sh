@@ -33,8 +33,8 @@ if [ -f "package.json" ]; then
     fi
 
     # Run the production build
-#    echo "Running build..."
-#    su-exec nginx npm run build
+    echo "Running build..."
+    su-exec nginx npm run build
 else
     echo "Notice: package.json not found in /var/www. Skipping Node tasks."
 fi

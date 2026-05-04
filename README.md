@@ -1,58 +1,149 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📞 Phone Numbers — Axon 
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A single-page application that lists, categorizes, and validates country phone numbers from a database.
 
-## About Laravel
+---
+## 📚 Documentation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **[Docker Setup](docs/docker.md)** — Container management & commands
+- **[Husky Git Hooks](docs/husky/husky.md)** — Automated code quality checks on commit
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ⚙️ Setup & Installation
 
-## Learning Laravel
+### 📋 Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [Docker](https://docs.docker.com/get-docker/)
+- [Make](https://www.gnu.org/software/make/)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🚀 Quick Start
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+make rebuild-container
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+This single command:
+- Starts all Docker containers (PHP, Web, Redis)
+- Installs Composer dependencies
+- Generates the application key
+- Runs database migrations & seeds
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ✨ Features
 
-## Code of Conduct
+- List all phone numbers stored in the database
+- Filter by **country** (Cameroon, Ethiopia, etc) Check CountryEnum For the reset
+- Filter by **state** (Valid / Invalid) — determined by per-country regex rules
+- Server-side **pagination** with configurable page size (5 / 10 / 15 / 20)
+- Smart **caching layer** (Redis, Database, or file — auto-detected)
+- Cache bypass via `?no-cache` query parameter
+- Clean architecture: DTOs · Enums · Form Requests · API Resources
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🎥 Video Demonstrations
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **[Project Planning & Architecture-1](https://www.loom.com/share/e6ec749737104fb5844fe74f02e38f1b)** 
+- **[Frontend Interface-2](https://www.loom.com/share/46c4d870630f450a95f466dcb673e5eb)** 
+- **[Filtering Logic-3](https://www.loom.com/share/8151bdb07e5846379879c002e3894c38)** 
+- **[System Cache Strategy-4](https://www.loom.com/share/3bc692878ce34d7180e17253d68757e7)** 
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🛠️ Tech Stack
+
+| Layer                | Technologies                           |
+|----------------------|----------------------------------------|
+| **Backend**          | PHP 8.3 · Laravel 13                   |
+| **Frontend**         | Vue 3 (Composition API)                |
+| **Database/Caching** | Sqlite · Redis                         |
+| **Testing**          | Pest · PHPStan · Pint                  |
+| **Dev Tools**        | Docker · Husky · Debugbar              |
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint              | Description                                      |
+|--------|-----------------------|--------------------------------------------------|
+| `GET`  | `/api/phone-numbers`  | Paginated list of phone numbers with filters     |
+| `GET`  | `/api/dropdowns`      | Country and state options for the filter selects |
+
+### Query Parameters — `GET /api/phone-numbers`
+
+| Parameter  | Type      | Default | Description                       |
+|------------|-----------|---------|-----------------------------------|
+| `country`  | `string`  | `null`  | Country dial code (e.g. `237`)    |
+| `state`    | `string`  | `null`  | `valid` or `invalid`              |
+| `page`     | `integer` | `1`     | Current page number               |
+| `per_page` | `integer` | `5`     | Results per page (5/10/15/20)     |
+
+---
+
+## 🧪 Testing & Code Quality
+
+```bash
+# Static analysis
+make test-phpstan
+
+# Code style
+make test-pint
+```
+
+---
+
+## 📐 Architecture Overview
+
+```
+app/
+├── DTOs/
+│   ├── BaseDto.php                  # Reflection-based hydration + cache key generation
+│   └── PhoneNumberSearchDto.php     # Search filters DTO
+├── Enums/
+│   ├── CountryEnum.php              # Country codes + validation regex
+│   └── PhoneStateEnum.php           # Valid / Invalid state
+├── Facades/
+│   └── ToggleCache.php              # Facade for the cache support class
+├── Http/
+│   ├── Controllers/API/
+│   │   └── PhoneNumberController.php
+│   ├── Requests/
+│   │   └── PhoneNumberIndexRequest.php
+│   └── Resources/
+│       └── PhoneNumberResource.php  # Formats + validates each phone number
+└── Support/
+    └── ToggleCacheSupport.php       # Smart cache layer (Redis / DB / file)
+```
+
+---
+
+## ⚡ Caching Strategy
+
+The `ToggleCacheSupport` class provides a unified cache interface that works across drivers:
+
+- **Redis** — uses `SCAN` with prefix pattern matching for targeted invalidation
+- **Database** — uses `LIKE` pattern on the cache key column
+- **File/other** — falls back to full `Cache::flush()`
+
+Cache keys are generated dynamically from DTO properties, e.g.:
+
+```
+layout:dashboard|table:customers|country:237|state:valid|page:1|per_page:5
+```
+
+Additional controls:
+
+```bash
+# Enable or Disable viewing cache key name
+TOGGLE_CACHE_DEBUG=true
+# Enable or Disable caching globally
+TOGGLE_CACHE_ENABLED=true
+
+
+# Bypass cache for a single request
+GET /api/phone-numbers?no-cache
+```
+---
+
